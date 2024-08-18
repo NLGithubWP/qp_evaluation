@@ -189,8 +189,8 @@ from algorithms.avgdl import collate as avgdl_collate
 
 
 class Args:
-    # device = 'cuda:1'
-    device = 'cpu'
+    device = 'cuda:1'
+    # device = 'cpu'
     bs = 128
     epochs = 200
     lr = 1e-3
@@ -208,8 +208,8 @@ if not os.path.exists(save_path):
 seed = 0
 torch.manual_seed(seed)
 torch.cuda.manual_seed_all(seed)
-torch.backends.cudnn.deterministic = False
-torch.backends.cudnn.benchmark = False
+torch.backends.cudnn.deterministic = True
+torch.backends.cudnn.benchmark = True
 
 from trainer import Prediction, train
 from torch import nn
@@ -263,6 +263,12 @@ res['Train Time'] = bo_agent.tr
 res['Inf Time'] = bo_agent.tm
 res['Preprocess Time'] = bo_agent.tl
 res['Selections'] = bo_agent.selections
+
+# Saving the results DataFrame as a CSV file
+csv_file_path = 'results/bao/avgdl/optimization_results.csv'
+res.to_csv(csv_file_path, index=False)
+print(f"Results have been saved to {csv_file_path}")
+
 
 arms = len(latencies)
 length = len(latencies[0])
